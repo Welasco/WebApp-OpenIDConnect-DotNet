@@ -16,7 +16,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: netcoreaspnet
-        image: welasco/netcoreaspnet
+        image: welasco/webapp-openidconnect-dotnet
         ports:
         - containerPort: 5000
         env:
