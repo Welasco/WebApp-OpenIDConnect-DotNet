@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
+using System;
 
 namespace WebApp_OpenIDConnect_DotNet
 {
@@ -73,12 +74,16 @@ namespace WebApp_OpenIDConnect_DotNet
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // Force HTTP believe everything is HTTPs
-            app.Use((context, next) =>
+            
+            if (Environment.GetEnvironmentVariable("BEHINDPROXY").ToLower() == "true")
             {
-                context.Request.Scheme = "https";
-                return next();
-            });            
+                // Force HTTP believe everything is HTTPs
+                app.Use((context, next) =>
+                {
+                    context.Request.Scheme = "https";
+                    return next();
+                });            
+            }
 
             if (env.IsDevelopment())
             {
