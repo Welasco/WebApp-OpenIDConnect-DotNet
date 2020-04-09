@@ -27,6 +27,7 @@ ENV PATH ${PATH}:/app
 
 ENV APP_HOME "/app"
 ENV HTTPD_LOG_DIR "/app/LogFiles"
+ENV BEHINDPROXY "true"
 
 # CMD [ "npm", "start" ]
 ENTRYPOINT ["/opt/startup/init_container.sh"]
