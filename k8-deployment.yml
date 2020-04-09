@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netcoreaspnet-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netcoreaspnet-app
+  template:
+    metadata:
+      labels:
+        app: netcoreaspnet-app
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: netcoreaspnet
+        image: welasco/netcoreaspnet
+        ports:
+        - containerPort: 5000
+        env:
+        - name: ENVTest
+          value: "EnvTestValue"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netcoreaspnet-service
+spec:
+  ports:
+  - port: 5000
+  selector:
+    app: netcoreaspnet-app
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: netcoreaspnet-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  tls:
+  - hosts:
+    - www.vwsazure.com
+    secretName: netcoreaspnet-ingress-tls
+  rules:
+  - host: www.vwsazure.com
+    http:
+      paths:
+      - backend:
+          serviceName: netcoreaspnet-service
+          servicePort: 5000
+        path: /
