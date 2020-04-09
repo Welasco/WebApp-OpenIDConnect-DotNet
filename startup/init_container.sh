@@ -22,4 +22,4 @@ eval $(printenv | awk -F= '{print "export " $1"="$2 }' >> /etc/profile)
 
 echo "Running AspNetCore"
 cd /app
-dotnet .NetCoreAspNet.dll
+dotnet WebApp-OpenIDConnect-DotNet.dll
