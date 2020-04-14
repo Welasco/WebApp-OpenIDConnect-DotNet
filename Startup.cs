@@ -75,15 +75,19 @@ namespace WebApp_OpenIDConnect_DotNet
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             
-            if (Environment.GetEnvironmentVariable("BEHINDPROXY").ToLower() == "true")
+            if (Environment.GetEnvironmentVariable("BEHINDPROXY") != null)
             {
-                // Force HTTP believe everything is HTTPs
-                app.Use((context, next) =>
+                if (Environment.GetEnvironmentVariable("BEHINDPROXY").ToLower() == "true")
                 {
-                    context.Request.Scheme = "https";
-                    return next();
-                });            
+                    // Force HTTP believe everything is HTTPs
+                    app.Use((context, next) =>
+                    {
+                        context.Request.Scheme = "https";
+                        return next();
+                    });            
+                }                
             }
+
 
             if (env.IsDevelopment())
             {
